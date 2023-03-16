@@ -36,11 +36,11 @@ var		([a-zA-Z])+
 /** RULES SECTION **/
 %%
 [ \r\n\t]		{/*Пропустить значки тобуляции, пропуски, пробелы.*/}
-"class"			{yyval = CLASS; 							return CLASS;}
-"{"				{yyval = LBRACE; 							return LBRACE;}
-"}"				{yyval = RBRACE; 							return RBRACE;}
-":"				{yyval = COLON; 							return COLON;}
-";"				{yyval = SEMICOLON; 						return SEMICOLON;}
+"class"			{yyval = CLASS; 				return CLASS;}
+"{"			{yyval = LBRACE; 				return LBRACE;}
+"}"			{yyval = RBRACE; 				return RBRACE;}
+":"			{yyval = COLON; 				return COLON;}
+";"			{yyval = SEMICOLON; 				return SEMICOLON;}
 "public"		{yyval = PUBLIC;  	yylval.int_val = yyval; return PUBLIC;}
 "private"		{yyval = PRIVATE; 	yylval.int_val = yyval; return PRIVATE;}
 "protected"		{yyval = PROTECTED; yylval.int_val = yyval; return PROTECTED;}
