@@ -74,10 +74,10 @@ protected
 IDENTIFIER:	('a'..'z'|'A'..'Z')+
 	;
 	
-VAR:  ("class") => "class"			{ _ttype = CLASS; }
-	| ("int") => "int"				{ _ttype = INT; }
-	| ("public") => "public" 		{ _ttype = PUBLIC; }
-	| ("private") => "private" 		{ _ttype = PRIVATE; }
+VAR:  ("class") => "class"		{ _ttype = CLASS; }
+	| ("int") => "int"		{ _ttype = INT; }
+	| ("public") => "public" 	{ _ttype = PUBLIC; }
+	| ("private") => "private" 	{ _ttype = PRIVATE; }
 	| ("protected") => "protected" 	{ _ttype = PROTECTED; }
 	| IDENTIFIER
 	;
