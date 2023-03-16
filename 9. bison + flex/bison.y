@@ -15,21 +15,12 @@ extern int yylex(void);
 extern void yyerror(char *s);
 extern int yywrap(void){return 1;};
 
-/* enum yytokentype pre_yyval; */
-
 #define TOSTRING(x) #x
 
 int FLG = 0;
+void f1(char* s);
 
 void f2(int s);
-
-void f1(char* s){
-	if(FLG == 1){
-		f2(0); /* default mark; */
-		FLG == 0;
-	}
-}
-
 %}
 /****************************************************************************************************/
 
@@ -44,17 +35,15 @@ void f1(char* s){
 %start P_1 /*start from P_1*/
 
 %token <int_val> CLASS 
-%token <op_val> VAR 
+%token <op_val> VAR
 %token <int_val> LBRACE 
 %token <int_val> RBRACE 
 %token <int_val> COLON 
 %token <int_val> SEMICOLON 
-%token <int_val> M_VAR
 %token <int_val> PUBLIC
 %token <int_val> PRIVATE
 %token <int_val> PROTECTED
 %token <op_val> T_VAR 
-%token <op_val> EMPTY
 
 /* 2.2| regular expressions */
 
@@ -64,17 +53,19 @@ void f1(char* s){
 /*** 3| RULES SECTION **/
 %%
 	/* 1] <P_1>::= class VAR{<P_2>}; */
-P_1	: CLASS VAR { printf("Class name: \033[1;32m%s\033[0m; \n", $2); } LBRACE  { FLG = 1;} P_2 RBRACE SEMICOLON {  printf("Succsess!\n"); YYACCEPT; }
+P_1	: CLASS VAR { printf("Class name: \033[1;32m%s\033[0m; \n", $2); } LBRACE  { FLG = 1; /*[1]*/} P_2 RBRACE SEMICOLON {  printf("Succsess!\n"); YYACCEPT; }
 	;
 	
 	/* 2] <P_2>::= <M_V>:<P_2> | <T_V> VAR; <P_2> | E */
 P_2	: M_V { FLG = 0;} COLON P_2 
 	| T_V VAR {  printf("Attribute name: \033[1;31m%s\033[0m;\n", $2); } SEMICOLON P_2 	
-	| ' '
+	| /* EMPTY */
 	;
 	
 	/* 3] <M_V>::= public | private | protected */
-M_V	: M_VAR { f2($1); }
+M_V	: PUBLIC 	{ f2($1); }
+	| PRIVATE	{ f2($1); }
+	| PROTECTED	{ f2($1); }
 	; 
 	
 	/* 4] <T_V>::= int | VAR */
@@ -97,6 +88,13 @@ int main(void){
 	printf("\033[1;31mEnter a sentence: \033[0m");
 	
 	return yyparse();
+}
+
+void f1(char* s){
+	if(FLG == 1){
+		f2(0); /* default mark; */
+		FLG == 0;
+	}
 }
 
 void f2(int s){
@@ -129,5 +127,7 @@ Bison принимает на вход спецификацию контекст
 
 ! Доп: https://ianfinlayson.net/class/cpsc401/notes/08-bison
 ! https://ipc.susu.ru/28181-4.html
+
+[1]: Устанавливаем флаг в 1 и если после LBRACE сразу идет T_VAR, то выводим метку видимости по умолчанию и переключаем затем флаг в 0.
 */
 /**************************************************************************************************/
